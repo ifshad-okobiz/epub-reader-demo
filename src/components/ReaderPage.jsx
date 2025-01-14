@@ -11,7 +11,6 @@ export const ReaderPage = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [expandedIndices, setExpandedIndices] = React.useState([]);
 
-  // console.log(selections);
 
   const tocRef = React.useRef(null);
   const renditionRef = React.useRef(null);

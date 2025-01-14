@@ -19,7 +19,6 @@ export const NavBar = ({
   setSelections,
 }) => {
   const [mobileDrawer, setMobileDrawer] = React.useState(false);
-  // console.log(mobileDrawer, "mobileDrawer");
 
   return (
     <>
