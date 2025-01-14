@@ -31,16 +31,16 @@ export const NavBar = ({
           {/* Page Number */}
           <div className="">{page}</div>
           {/* Resize Button */}
-          <div className="">
+          <div className="border flex items-center justify-between">
             <button
-              className="p-3 rounded-sm bg-rose-300"
+              className="px-3 py-1 rounded-l-sm bg-slate-200 hover:bg-slate-300"
               onClick={() => changeSize(Math.max(80, size - 10))}
             >
               -
             </button>
-            <span>Current size: {size}%</span>
+            <span>{size}%</span>
             <button
-              className="p-3 rounded-sm bg-green-300"
+              className="px-3 py-1 rounded-r-sm bg-slate-200 hover:bg-slate-300"
               onClick={() => changeSize(Math.min(130, size + 10))}
             >
               +
@@ -49,7 +49,10 @@ export const NavBar = ({
         </div>
 
         <div>
-          <button className="" onClick={toggleDrawer}>
+          <button
+            className="hover:text-blue-500 transition-all duration-200"
+            onClick={toggleDrawer}
+          >
             Highlight
           </button>
         </div>
@@ -151,7 +154,7 @@ export const NavBar = ({
                   setMobileDrawer((prevState) => !prevState);
                 }}
               >
-                <IoMdCloseCircleOutline size={24}  />
+                <IoMdCloseCircleOutline size={24} />
               </button>
             </div>
 
