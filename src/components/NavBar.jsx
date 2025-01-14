@@ -19,7 +19,7 @@ export const NavBar = ({
   setSelections,
 }) => {
   const [mobileDrawer, setMobileDrawer] = React.useState(false);
-  console.log(mobileDrawer, "mobileDrawer");
+  // console.log(mobileDrawer, "mobileDrawer");
 
   return (
     <>
@@ -30,8 +30,9 @@ export const NavBar = ({
         <div className="flex items-center gap-4">
           {/* Page Number */}
           <div className="">{page}</div>
+
           {/* Resize Button */}
-          <div className="border flex items-center justify-between">
+          <div className="w-32 border flex items-center justify-between">
             <button
               className="px-3 py-1 rounded-l-sm bg-slate-200 hover:bg-slate-300"
               onClick={() => changeSize(Math.max(80, size - 10))}
@@ -53,19 +54,19 @@ export const NavBar = ({
             className="hover:text-blue-500 transition-all duration-200"
             onClick={toggleDrawer}
           >
-            Highlight
+            Highlights
           </button>
         </div>
       </div>
 
       {/* Small Device */}
-      <div className="w-full flex md:hidden items-center justify-between py-3 px-6 border">
-        <div>Brand Name</div>
+      <div className="w-full flex md:hidden items-center justify-between py-3 px-6 border-b">
+        <div className="w-1/3">Brand Name</div>
 
         {/* Page Number */}
-        <div className="">{page}</div>
+        <div className="w-1/3">{page}</div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex justify-end items-center gap-4 w-1/3">
           <button
             onClick={() => {
               setMobileDrawer((prevState) => !prevState);
@@ -76,7 +77,7 @@ export const NavBar = ({
         </div>
       </div>
 
-      {/*Highlight Drawer (Large Device)*/}
+      {/*Highlights Drawer (Large Device)*/}
       <Drawer
         open={isOpen}
         onClose={toggleDrawer}
@@ -86,7 +87,12 @@ export const NavBar = ({
       >
         {/* Highlighted Texts */}
         <div className="w-full">
-          <h1 className="text-2xl font-semibold py-6 px-4">Highlight</h1>
+          <div className="flex justify-between items-center py-6 px-4">
+            <h1 className="text-2xl font-semibold">Highlights</h1>
+            <button onClick={toggleDrawer}>
+              <IoMdCloseCircleOutline size={24} />
+            </button>
+          </div>
           <ul className="w-full flex flex-col gap-4">
             {selections.map(({ text, cfiRange }, i) => {
               const isExpanded = expandedIndices.includes(i);
@@ -181,7 +187,7 @@ export const NavBar = ({
 
           {/* Highlighted Texts */}
           <div className="w-full">
-            <h1 className="text-2xl font-semibold py-6 px-4">Highlight</h1>
+            <h1 className="text-2xl font-semibold py-6 px-4">Highlights</h1>
             <ul className="w-full flex flex-col gap-4">
               {selections.map(({ text, cfiRange }, i) => {
                 const isExpanded = expandedIndices.includes(i);
