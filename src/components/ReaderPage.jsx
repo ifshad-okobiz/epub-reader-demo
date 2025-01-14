@@ -1,5 +1,6 @@
 import React from "react";
-import { ReactReader, ReactReaderStyle } from "react-reader";
+import { ReactReader } from "react-reader";
+import { NavBar } from "./NavBar";
 
 export const ReaderPage = () => {
   const [location, setLocation] = React.useState(0);
@@ -7,9 +8,23 @@ export const ReaderPage = () => {
   const [page, setPage] = React.useState("");
   const [size, setSize] = React.useState(100);
   const [selections, setSelections] = React.useState([]);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [expandedIndices, setExpandedIndices] = React.useState([]);
+
+  console.log(selections);
 
   const tocRef = React.useRef(null);
   const renditionRef = React.useRef(null);
+
+  const toggleExpand = (index) => {
+    setExpandedIndices((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    );
+  };
+
+  const toggleDrawer = () => {
+    setIsOpen((prevState) => !prevState);
+  };
 
   const locationChanged = (epubcifi) => {
     if (!firstRenderDone) {
@@ -19,10 +34,8 @@ export const ReaderPage = () => {
     }
 
     if (renditionRef.current && tocRef.current) {
-      const { displayed, href } = renditionRef.current.location.start;
-      const chapter = tocRef.current.find((item) => item.href === href);
-      setPage(`Page ${displayed.page} of ${displayed.total} in chapter`);
-
+      const { displayed } = renditionRef.current.location.start;
+      setPage(`Page ${displayed.page} of ${displayed.total}`);
       localStorage.setItem("book-progress", epubcifi);
       setLocation(epubcifi);
     }
@@ -60,28 +73,23 @@ export const ReaderPage = () => {
     }
   }, [size, setSelections, selections]);
 
-  const ownStyles = {
-    ...ReactReaderStyle,
-    arrow: {
-      ...ReactReaderStyle.arrow,
-      color: "red",
-      top: "90%",
-    },
-    tocArea: {
-      ...ReactReaderStyle.tocArea,
-      background: "red",
-    },
-  };
-
-  console.log(ownStyles);
   return (
     <div style={{ height: "100vh" }}>
+      <NavBar
+        page={page}
+        size={size}
+        changeSize={changeSize}
+        toggleDrawer={toggleDrawer}
+        isOpen={isOpen}
+        selections={selections}
+        toggleExpand={toggleExpand}
+        expandedIndices={expandedIndices}
+        renditionRef={renditionRef}
+        setSelections={setSelections}
+      />
       <ReactReader
         title="New Book"
         url="https://react-reader.metabits.no/files/alice.epub"
-        epubInitOptions={{
-          openAs: "epub",
-        }}
         location={location}
         locationChanged={locationChanged}
         getRendition={(rendition) => {
@@ -94,61 +102,8 @@ export const ReaderPage = () => {
           });
           setSelections([]);
         }}
-        // readerStyles={ownStyles}
         tocChanged={(toc) => (tocRef.current = toc)}
       />
-
-      {/* Page Number */}
-      <div className="absolute bottom-4 right-0 z-10">{page}</div>
-
-      {/* Resize Button */}
-      <div
-      className="absolute top-0 right-0 -translate-x-40 z-10"
-      >
-        <button
-          className="p-3 rounded-sm bg-rose-300"
-          onClick={() => changeSize(Math.max(80, size - 10))}
-        >
-          -
-        </button>
-        <span>Current size: {size}%</span>
-        <button
-          className="p-3 rounded-sm bg-green-300"
-          onClick={() => changeSize(Math.min(130, size + 10))}
-        >
-          +
-        </button>
-      </div>
-
-      {/* Highlghted Texts */}
-      <div className="absolute right-0 top-0 z-10">
-        Highlights
-        <ul>
-          {selections.map(({ text, cfiRange }, i) => (
-            <li key={i}>
-              {text}{" "}
-              <button
-                onClick={() => {
-                  renditionRef.current.display(cfiRange);
-                }}
-              >
-                Show
-              </button>
-              <button
-                onClick={() => {
-                  renditionRef.current.annotations.remove(
-                    cfiRange,
-                    "highlight"
-                  );
-                  setSelections(selections.filter((item, j) => j !== i));
-                }}
-              >
-                x
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
     </div>
   );
 };
